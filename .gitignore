@@ -12,3 +12,6 @@ npm-debug.log*
 
 # Original, full-size source photos (resized copies live in public/Pics)
 /pics/
+
+# Raw source audio (served copy lives in public/audio)
+/sound/
