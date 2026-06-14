@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   Base
+============================================================================= */
+:root {
+  color-scheme: dark;
+  --paper-grain: 0.04;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: auto; /* GSAP owns the scroll choreography */
+}
+
+body {
+  margin: 0;
+  background: #342fd4;
+  color: #fff8e8;
+  font-family: "Inter", system-ui, sans-serif;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Anything in the normal flow should never cause a horizontal scrollbar. */
+#root {
+  overflow-x: clip;
+}
+
+/* =============================================================================
+   Reusable artwork utilities
+============================================================================= */
+@layer components {
+  /* A torn / hand-cut warm-white paper edge around portraits. */
+  .paper-edge {
+    background: #fff8e8;
+    padding: 0.55rem;
+    box-shadow: 0 18px 40px -18px rgba(23, 19, 31, 0.55);
+    clip-path: polygon(
+      0% 4%, 4% 0%, 22% 3%, 48% 0%, 73% 4%, 96% 1%, 100% 6%,
+      99% 31%, 100% 55%, 98% 79%, 100% 97%, 95% 100%, 71% 98%,
+      47% 100%, 24% 98%, 3% 100%, 0% 95%, 2% 71%, 0% 47%, 1% 23%
+    );
+  }
+
+  /* Editorial headline with an offset duplicate "print mis-registration". */
+  .ink-shadow {
+    text-shadow:
+      0.04em 0.04em 0 var(--shadow-color, #ff2b91);
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--paper-grain);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .sticker-shadow {
+    filter: drop-shadow(0 6px 10px rgba(23, 19, 31, 0.35));
+  }
+}
+
+/* Hide scrollbars but keep scrolling (the story drives the page). */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Keyboard users must always see where they are. */
+:focus-visible {
+  outline: 3px solid #ffc400;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Respect the system "reduce motion" preference globally as a safety net.
+   Components also branch on this in JS to swap in static layouts. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility: lock body scroll while the opening sequence plays. */
+body.story-locked {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Subtly duotoned portrait look (black-and-white pushed toward the palette). */
+.anjali-duotone {
+  filter: grayscale(1) contrast(1.05) brightness(1.02) sepia(0.35)
+    hue-rotate(200deg) saturate(1.4);
+}
+
+/* A reusable "shaky" hand-drawn dashed line for scrapbook accents. */
+.doodle-stroke {
+  stroke: currentColor;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1 14;
+}
+
+/* Helper so pinned GSAP scenes never bleed a horizontal scrollbar. */
+.pin-clip {
+  overflow: hidden;
+}
+
+/* "Keep this memory" → print only the keepsake card, nothing else. */
+@media print {
+  body {
+    background: #fff;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-card,
+  .print-card * {
+    visibility: visible;
+  }
+  .print-card {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    box-shadow: none;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}

@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+npm-debug.log*
+
+# Local dev tooling
+.claude/
+
+# Original, full-size source photos (resized copies live in public/Pics)
+/pics/
